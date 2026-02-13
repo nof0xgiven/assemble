@@ -343,6 +343,7 @@ _assembled via pi_`;
 
 			try {
 				// Phase 1: Scout
+				ctx.ui.setStatus("assemble", "Running scout...");
 				const scoutStart = Date.now();
 				const scoutResult = await runSingleAgent(
 					ctx.cwd,
@@ -379,6 +380,7 @@ _assembled via pi_`;
 				await postComment(ticketId, formatScoutComment(scoutResult, scoutDuration), ticket.id);
 
 				// Phase 2: Planner
+				ctx.ui.setStatus("assemble", "Running planner...");
 				const plannerStart = Date.now();
 				const plannerResult = await runSingleAgent(
 					ctx.cwd,
@@ -418,6 +420,7 @@ _assembled via pi_`;
 				// Worker/Reviewer Loop (max 3 iterations)
 				for (let iteration = 1; iteration <= MAX_ITERATIONS; iteration++) {
 					// Worker phase
+					ctx.ui.setStatus("assemble", `Running worker (iteration ${iteration}/${MAX_ITERATIONS})...`);
 					const workerStart = Date.now();
 					const workerResult = await runSingleAgent(
 						ctx.cwd,
@@ -462,6 +465,7 @@ _assembled via pi_`;
 					await postComment(ticketId, formatWorkerComment(workerResult, iteration, workerDuration), ticket.id);
 
 					// Reviewer phase
+					ctx.ui.setStatus("assemble", `Running reviewer (iteration ${iteration}/${MAX_ITERATIONS})...`);
 					const reviewerStart = Date.now();
 					const reviewerResult = await runSingleAgent(
 						ctx.cwd,
@@ -516,6 +520,8 @@ _assembled via pi_`;
 				fatalError = error instanceof Error ? error.message : String(error);
 				console.error("Assembly error:", fatalError);
 			}
+
+			ctx.ui.setStatus("assemble", undefined);
 
 			// Post final summary (skip if a partial summary was already posted for a failed phase)
 			const summary = formatSummary(ticket, phases, finalVerdict, phases.filter(p => p.agent.startsWith("worker")).length);
