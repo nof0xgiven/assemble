@@ -24,7 +24,7 @@ The `/assemble` command does three things, then hands control to the LLM:
 2. **Posts** an "Assembly Started" comment to Linear
 3. **Sends a prompt** via `sendUserMessage` that instructs the LLM to run the pipeline
 
-The LLM then calls the `subagent` tool naturally — the same way `prompts/implement.md` works — giving you full native TUI rendering for every phase.
+The LLM then calls the `subagent` tool naturally — giving you full native TUI rendering for every phase.
 
 ```
 /assemble ENG-123
