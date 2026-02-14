@@ -4,6 +4,8 @@
 
 A Linear-synced multi-agent orchestration extension for [pi](https://github.com/mariozechner/pi) — the AI coding agent.
 
+This extension uses the Linear GraphQL API directly (no local CLI dependency is used).
+
 Run a full `scout → planner → worker → reviewer` pipeline on any Linear ticket, with automatic progress updates posted as comments — all rendered with full native TUI output.
 
 ## Features
@@ -93,6 +95,30 @@ Registered globally by the extension. The LLM calls this after each pipeline pha
 | `ticketId` | string | Linear ticket identifier (e.g. `ENG-123`) |
 | `issueId` | string | Linear issue UUID for direct API access |
 | `body` | string | Markdown comment body to post |
+
+## Included prompts and onboarding
+
+This extension ships opinionated prompt templates you can reuse for consistent `/assemble` behavior:
+
+- `docs/agent-prompts/scout.md`
+- `docs/agent-prompts/planner.md`
+- `docs/agent-prompts/worker.md`
+- `docs/agent-prompts/reviewer.md`
+
+### Install prompts
+
+If you want to use these exact prompts:
+
+```bash
+mkdir -p ~/.pi/agent/agents
+cp extensions/assemble/docs/agent-prompts/*.md ~/.pi/agent/agents/
+```
+
+Then reload pi:
+
+```bash
+/reload
+```
 
 ## Configuration
 
