@@ -45,6 +45,18 @@ The LLM then calls the `subagent` tool naturally — the same way `prompts/imple
   └────────────────────────────────────────────┘
 ```
 
+### Runtime agent lookup
+
+The subagent names in the workflow are resolved from Pi's agent registry. `/assemble` itself does not load prompt files from the extension directory.
+
+It calls agent names:
+- `scout`
+- `planner`
+- `worker`
+- `reviewer`
+
+These names must exist as active agent prompts in your Pi agent config (typically `~/.pi/agent/agents/`).
+
 ## Requirements
 
 1. **pi** — The AI coding agent (v0.52+)
@@ -64,6 +76,7 @@ The LLM then calls the `subagent` tool naturally — the same way `prompts/imple
 
 ```bash
 # 1. Clone or copy the extension
+# Example (if your extension repo is separate):
 git clone https://github.com/nof0xgiven/assemble.git ~/.pi/agent/extensions/assemble
 
 # 2. Ensure you have the required agents
@@ -74,6 +87,14 @@ ls ~/.pi/agent/agents/
 export LINEAR_API_KEY="lin_api_..."
 
 # 4. Reload pi
+/reload
+```
+
+If you want to use the prompts packaged with this repo as a starting point, copy them into your active agent directory:
+
+```bash
+mkdir -p ~/.pi/agent/agents
+cp extensions/assemble/docs/agent-prompts/*.md ~/.pi/agent/agents/
 /reload
 ```
 
@@ -98,27 +119,14 @@ Registered globally by the extension. The LLM calls this after each pipeline pha
 
 ## Included prompts and onboarding
 
-This extension ships opinionated prompt templates you can reuse for consistent `/assemble` behavior:
+This extension includes snapshot prompt files for documentation and reproducibility:
 
 - `docs/agent-prompts/scout.md`
 - `docs/agent-prompts/planner.md`
 - `docs/agent-prompts/worker.md`
 - `docs/agent-prompts/reviewer.md`
 
-### Install prompts
-
-If you want to use these exact prompts:
-
-```bash
-mkdir -p ~/.pi/agent/agents
-cp extensions/assemble/docs/agent-prompts/*.md ~/.pi/agent/agents/
-```
-
-Then reload pi:
-
-```bash
-/reload
-```
+They are snapshots only. The runtime `/assemble` behavior is driven by the live files in `~/.pi/agent/agents/`.
 
 ## Configuration
 
